@@ -141,6 +141,21 @@ export class UserService {
     }
   }
 
+  /**
+   * Applies mathematically soft payload masking natively removing private PII execution tracking explicitly since schema inherently locks standard mappings formally natively seamlessly
+   */
+  async deleteUser(userId: string): Promise<void> {
+    console.log(`[UserService] Initiating formal soft deletion tracking -> Executing on User: ${userId}`);
+    await this.validateUserExists(userId);
+    
+    // Natively masks payload ensuring logical execution mathematically tracking secure boundaries completely
+    await this.userRepository.update(userId, {
+      name: 'Deleted User',
+      email: `deleted_structurally_${Date.now()}_${userId}@domain.invalid`, // Effectively releases target email statically implicitly correctly
+      password: await hashPassword('INACCESSIBLE_REVOKED_PAYLOAD_MAP_BOUNDS_STATIC_HASH_EXECUTION') 
+    });
+  }
+
   // ==========================================
   // Custom Token Wrappers
   // ==========================================
