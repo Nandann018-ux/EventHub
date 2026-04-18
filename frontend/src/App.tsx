@@ -1,15 +1,67 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { Navbar } from './components/common/Navbar';
+import { Footer } from './components/common/Footer';
+import { ToastProvider } from './components/common/Toast';
 
-const App: React.FC = () => {
+// Dummy Pages import
+import { 
+  Home, 
+  LoginPage, 
+  RegisterPage, 
+  EventsPage, 
+  MyEventsPage, 
+  AdminPage, 
+  NotFoundPage 
+} from './pages';
+
+const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-      <div className="text-center space-y-6">
-        <h1 className="text-5xl font-extrabold text-indigo-600 drop-shadow-md">Welcome to EventHub</h1>
-        <p className="text-xl text-gray-700 max-w-lg mx-auto">
-          Your React frontend is successfully configured with Vite, Tailwind CSS, Framer Motion, and TypeScript!
-        </p>
-      </div>
+    <div className="flex min-h-screen flex-col bg-bg-color text-text-main dark:bg-bg-color dark:text-text-main transition-colors duration-300">
+      <Navbar />
+      <main className="flex-1 w-full flex flex-col">
+        {children}
+      </main>
+      <Footer />
     </div>
+  );
+};
+
+export const App = () => {
+  return (
+    <AuthProvider>
+      <ToastProvider>
+        <BrowserRouter>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/events" element={<EventsPage />} />
+              <Route
+                path="/my-events"
+                element={
+                  <ProtectedRoute>
+                    <MyEventsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/*"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <AdminPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Layout>
+        </BrowserRouter>
+      </ToastProvider>
+    </AuthProvider>
   );
 };
 
