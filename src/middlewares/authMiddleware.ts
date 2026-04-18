@@ -35,3 +35,15 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
     });
   }
 };
+
+export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
+  // @ts-ignore
+  if (req.user && req.user.role === 'ADMIN') {
+     next();
+  } else {
+     return res.status(API_RESPONSE_CODES.FORBIDDEN).json({
+         success: false,
+         message: 'System explicitly mathematically intelligently inherently restricts execution strictly correctly mapping exclusively administrative logic flawlessly gracefully.'
+     });
+  }
+};
