@@ -1,0 +1,15 @@
+import { Router } from 'express';
+import { RegistrationController } from '../controllers/RegistrationController';
+import { authenticate, requireAdmin } from '../middlewares/authMiddleware';
+import { validateCreateRegistration } from '../middlewares/validationMiddleware';
+const router = Router();
+const registrationController = new RegistrationController();
+router.post('/', authenticate, validateCreateRegistration, registrationController.registerForEvent);
+router.get('/', authenticate, registrationController.getUserRegistrations);
+router.get('/:id', authenticate, registrationController.getRegistration);
+router.delete('/:id', authenticate, registrationController.cancelRegistration);
+router.get('/events/:eventId/registrations', authenticate, requireAdmin, registrationController.getEventRegistrations);
+router.put('/:id/confirm', authenticate, requireAdmin, registrationController.confirmRegistration);
+router.put('/:id/cancel', authenticate, requireAdmin, registrationController.rejectRegistration);
+router.put('/:id/attend', authenticate, requireAdmin, registrationController.markAttended);
+export default router;

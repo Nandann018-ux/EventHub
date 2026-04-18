@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import { UserController } from '../controllers/UserController';
+import { authenticate, requireAdmin } from '../middlewares/authMiddleware';
+import { validateCreateUser } from '../middlewares/validationMiddleware';
+const router = Router();
+const userController = new UserController();
+router.post('/register', validateCreateUser, userController.register);
+router.post('/login', userController.login);
+router.get('/profile', authenticate, userController.getProfile);
+router.put('/profile', authenticate, userController.updateProfile);
+router.post('/logout', authenticate, userController.logout);
+router.get('/', authenticate, requireAdmin, userController.getAllUsers);
+router.get('/:id', authenticate, requireAdmin, userController.getUserById);
+export default router;
