@@ -18,7 +18,7 @@ app.use(express.json());
 
 
 app.get('/', (req: Request, res: Response) => {
-  res.json({ message: 'EventHub API is running' });
+  res.json({ message: 'EventHub API is running v2' });
 });
 
 
