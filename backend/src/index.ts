@@ -10,8 +10,12 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 
+const rawOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
+// Ensure origin doesn't have a trailing slash or path (common mistake)
+const allowedOrigin = rawOrigin.replace(/\/$/, '').split('/').slice(0, 3).join('/');
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: [allowedOrigin, 'http://localhost:5173'], // Allow both prod and dev origins
   credentials: true
 }));
 app.use(express.json());
