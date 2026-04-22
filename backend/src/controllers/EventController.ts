@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import prisma from '../db';
-import { AuthRequest } from '../middlewares/authMiddleware';
+import prisma from '../db/index.js';
+import { AuthRequest } from '../middlewares/authMiddleware.js';
 
 
 export const createEvent = async (req: AuthRequest, res: Response) => {
