@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "Node16",
-    "lib": ["ESNext"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ESNext", "DOM"],
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "Node16", 
     "resolveJsonModule": true,
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["node", "express", "cors", "jsonwebtoken", "bcryptjs"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
