@@ -1,81 +1,37 @@
+
+
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-}
-
-enum Role {
-  USER
-  ADMIN
-}
-
-enum EventStatus {
-  ACTIVE
-  CANCELLED
-}
-
-enum RegistrationStatus {
-  REGISTERED
-  CONFIRMED
-  CANCELLED
-  ATTENDED
 }
 
 model User {
   id        String   @id @default(uuid())
+  name      String
   email     String   @unique
   password  String
-  name      String
-  role      Role     @default(USER)
+  role      String   @default("ATTENDEE")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // Relationships
-  createdEvents Event[]        @relation("CreatedEvents")
-  registrations Registration[]
-
-  // Email is already indexed via @unique, but ensuring it's clear
-  @@index([email])
+  events    Event[]  @relation("OrganizerEvents")
 }
 
 model Event {
-  id          String      @id @default(uuid())
+  id          String   @id @default(uuid())
   title       String
   description String
-  dateTime    DateTime
-  venue       String
-  maxCapacity Int
-  status      EventStatus @default(ACTIVE)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-
-  // Relationships
-  createdBy   String
-  creator     User           @relation("CreatedEvents", fields: [createdBy], references: [id])
-  registrations Registration[]
-
-  @@index([createdBy])
-}
-
-model Registration {
-  id           String             @id @default(uuid())
-  userId       String
-  eventId      String
-  status       RegistrationStatus @default(REGISTERED)
-  registeredAt DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
-
-  // Relationships
-  user  User  @relation(fields: [userId], references: [id])
-  event Event @relation(fields: [eventId], references: [id])
-
-  // Prevent duplicate registrations
-  @@unique([userId, eventId])
+  date        DateTime
+  location    String
+  capacity    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   
-  // Indexing for fast queries
-  @@index([userId])
-  @@index([eventId])
+  organizerId String
+  organizer   User     @relation("OrganizerEvents", fields: [organizerId], references: [id])
+  imageUrl    String?
 }
