@@ -1,68 +1,88 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { ProtectedRoute } from './components/auth/ProtectedRoute';
-import { Navbar } from './components/common/Navbar';
-import { Footer } from './components/common/Footer';
-import { ToastProvider } from './components/common/Toast';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Toaster } from 'react-hot-toast';
+import Layout from './components/Layout';
 
-// Dummy Pages import
-import { 
-  Home, 
-  LoginPage, 
-  RegisterPage, 
-  EventsPage, 
-  MyEventsPage, 
-  AdminPage, 
-  NotFoundPage 
-} from './pages';
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <div className="flex min-h-screen flex-col bg-bg-color text-text-main dark:bg-bg-color dark:text-text-main transition-colors duration-300">
-      <Navbar />
-      <main className="flex-1 w-full flex flex-col">
-        {children}
-      </main>
-      <Footer />
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import CreateEvent from './pages/CreateEvent';
+import EventDetails from './pages/EventDetails';
+import Profile from './pages/Profile';
+
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-black">
+      <div className="w-10 h-10 border-2 border-white/10 border-t-white rounded-full animate-spin" />
     </div>
   );
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
 };
 
-export const App = () => {
+
+function AnimatedRoutes() {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/event/:id" element={<EventDetails />} />
+        <Route 
+          path="/create-event" 
+          element={
+            <ProtectedRoute>
+              <CreateEvent />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } 
+        />
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+      </Routes>
+    </AnimatePresence>
+  );
+}
+
+function App() {
   return (
     <AuthProvider>
-      <ToastProvider>
-        <BrowserRouter>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/events" element={<EventsPage />} />
-              <Route
-                path="/my-events"
-                element={
-                  <ProtectedRoute>
-                    <MyEventsPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/*"
-                element={
-                  <ProtectedRoute requireAdmin={true}>
-                    <AdminPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </Layout>
-        </BrowserRouter>
-      </ToastProvider>
+      <Toaster 
+        toastOptions={{
+          style: {
+            background: '#0a0a0a',
+            color: '#fff',
+            border: '1px solid rgba(255,255,255,0.05)',
+            fontSize: '11px',
+            fontFamily: 'inherit',
+            fontWeight: 900,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            padding: '16px 24px',
+            borderRadius: '16px',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+          }
+        }}
+        position="top-center" 
+      />
+      <Router>
+        <Layout>
+          <AnimatedRoutes />
+        </Layout>
+      </Router>
     </AuthProvider>
   );
-};
+}
 
 export default App;
