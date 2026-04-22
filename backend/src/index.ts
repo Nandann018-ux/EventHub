@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
@@ -11,18 +11,18 @@ const port = process.env.PORT || 5000;
 
 
 app.use(cors({
-  origin: true, 
+  origin: 'https://event-hub-beta-one.vercel.app', 
   credentials: true
 }));
 app.use(express.json());
 
 
 app.get('/', (req: Request, res: Response) => {
-  res.json({ message: 'EventHub API is running v2' });
+  res.json({ message: 'EventHub API is running' });
 });
 
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   if (req.url.startsWith('/events') || req.url.startsWith('/auth')) {
     const newUrl = `/api${req.url}`;
     return res.redirect(307, newUrl);
