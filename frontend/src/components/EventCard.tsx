@@ -3,13 +3,14 @@ import { motion } from 'framer-motion';
 import { MapPin, User as UserIcon, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export interface Event {
+export interface EventHubEvent {
   id: string;
   title: string;
   description: string;
   date: string;
   location: string;
   capacity: number;
+  organizerId: string;
   imageUrl?: string;
   organizer: {
     name: string;
@@ -18,7 +19,7 @@ export interface Event {
 }
 
 interface EventCardProps {
-  event: Event;
+  event: EventHubEvent;
 }
 
 const EventCard: React.FC<EventCardProps> = ({ event }) => {

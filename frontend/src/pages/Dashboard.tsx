@@ -4,12 +4,12 @@ import { LayoutGrid, AlertCircle, RefreshCw, Filter, Compass } from 'lucide-reac
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
-import EventCard, { Event } from '../components/EventCard';
+import EventCard, { EventHubEvent } from '../components/EventCard';
 import EventSkeleton from '../components/EventSkeleton';
 import SearchBar from '../components/SearchBar';
 
 
-const MOCK_EVENTS: Event[] = [
+const MOCK_EVENTS: EventHubEvent[] = [
   {
     id: 'mock-1',
     title: 'AI & Machine Learning Vision Summit',
@@ -17,6 +17,7 @@ const MOCK_EVENTS: Event[] = [
     date: new Date('2026-06-15T09:00:00Z').toISOString(),
     location: 'Pune, Maharashtra',
     capacity: 500,
+    organizerId: 'user-1',
     imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2070&auto=format&fit=crop&sat=-100',
     organizer: { name: 'Nandan Achar', email: 'organizer@eventhub.com' }
   },
@@ -27,6 +28,7 @@ const MOCK_EVENTS: Event[] = [
     date: new Date('2026-07-20T10:00:00Z').toISOString(),
     location: 'Bangalore, Karnataka',
     capacity: 200,
+    organizerId: 'user-1',
     imageUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2070&auto=format&fit=crop&sat=-100',
     organizer: { name: 'Nandan Achar', email: 'organizer@eventhub.com' }
   },
@@ -37,6 +39,7 @@ const MOCK_EVENTS: Event[] = [
     date: new Date('2026-08-12T09:30:00Z').toISOString(),
     location: 'Mumbai, Maharashtra',
     capacity: 400,
+    organizerId: 'user-1',
     imageUrl: 'https://images.unsplash.com/photo-1551288049-bbbda536ad0a?q=80&w=2070&auto=format&fit=crop&sat=-100',
     organizer: { name: 'Nandan Achar', email: 'organizer@eventhub.com' }
   }
@@ -44,7 +47,7 @@ const MOCK_EVENTS: Event[] = [
 
 const Dashboard = () => {
   const { isAuthenticated } = useAuth();
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<EventHubEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [visibleCount, setVisibleCount] = useState(20);

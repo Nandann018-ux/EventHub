@@ -43,7 +43,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {}
-            <Link to="/" className="hover:opacity-80 transition-opacity invert brightness-0 grayscale">
+            <Link to="/" className="hover:opacity-80 transition-opacity">
               <Logo />
             </Link>
 

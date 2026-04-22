@@ -5,14 +5,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
-import EventCard, { Event } from '../components/EventCard';
+import EventCard, { EventHubEvent } from '../components/EventCard';
 import EventSkeleton from '../components/EventSkeleton';
 
 const Profile: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<EventHubEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

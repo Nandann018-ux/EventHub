@@ -14,27 +14,15 @@ import {
 import { QRCodeSVG } from 'qrcode.react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { EventHubEvent } from '../components/EventCard';
 
-interface EventDetailsData {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  location: string;
-  capacity: number;
-  imageUrl?: string;
-  organizer: {
-    name: string;
-    email: string;
-  };
-  organizerId: string;
-}
+
 
 const EventDetails = () => {
   const { id } = useParams();
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
-  const [event, setEvent] = useState<EventDetailsData | null>(null);
+  const [event, setEvent] = useState<EventHubEvent | null>(null);
   const [loading, setLoading] = useState(true);
   const [isBooked, setIsBooked] = useState(false);
 
@@ -60,7 +48,7 @@ const EventDetails = () => {
     toast.success('Ticket Generated Successfully!');
   };
 
-  const onImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const onImageError = (e: React.SyntheticEvent<HTMLImageElement, globalThis.Event>) => {
     const target = e.target as HTMLImageElement;
     target.src = 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop&sat=-100';
   };
