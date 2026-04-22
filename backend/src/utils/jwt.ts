@@ -1,22 +1,16 @@
 import jwt from 'jsonwebtoken';
-import { JWT_CONFIG } from '../config/jwt';
-export const generateToken = (
-  payload: string | object | Buffer,
-  expiresIn: string | number = JWT_CONFIG.EXPIRES_IN
-): string => {
-  return jwt.sign(payload, JWT_CONFIG.SECRET, { expiresIn });
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_jwt_key_change_this';
+
+
+export const generateToken = (userId: string): string => {
+  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: '7d' });
 };
-export const verifyToken = <T>(token: string): T => {
+
+
+export const verifyToken = (token: string): any => {
   try {
-    return jwt.verify(token, JWT_CONFIG.SECRET) as T;
-  } catch (error) {
-    throw new Error('Token is invalid or expired.');
-  }
-};
-export const extractUserId = (token: string): string | null => {
-  try {
-    const decoded = verifyToken<{ id: string }>(token);
-    return decoded?.id || null;
+    return jwt.verify(token, JWT_SECRET);
   } catch (error) {
     return null;
   }
