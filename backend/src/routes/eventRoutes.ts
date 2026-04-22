@@ -1,15 +1,22 @@
 import { Router } from 'express';
-import { EventController } from '../controllers/EventController';
-import { authenticate, requireAdmin } from '../middlewares/authMiddleware';
-import { validateCreateEvent, validateUpdateEvent } from '../middlewares/validationMiddleware';
+import { 
+  createEvent, 
+  getAllEvents, 
+  getEventById, 
+  updateEvent, 
+  deleteEvent 
+} from '../controllers/eventController';
+import { authMiddleware } from '../middlewares/authMiddleware';
+
 const router = Router();
-const eventController = new EventController();
-router.get('/', eventController.getAllEvents);
-router.get('/search', eventController.searchEvents);
-router.get('/:id', eventController.getEvent);
-router.get('/:id/stats', eventController.getEventStats);
-router.post('/', authenticate, requireAdmin, validateCreateEvent, eventController.createEvent);
-router.put('/:id', authenticate, requireAdmin, validateUpdateEvent, eventController.updateEvent);
-router.delete('/:id', authenticate, requireAdmin, eventController.deleteEvent);
-router.get('/:id/participants', authenticate, requireAdmin, eventController.getEventParticipants);
+
+
+router.get('/', getAllEvents);
+router.get('/:id', getEventById);
+
+
+router.post('/', authMiddleware, createEvent);
+router.put('/:id', authMiddleware, updateEvent);
+router.delete('/:id', authMiddleware, deleteEvent);
+
 export default router;
