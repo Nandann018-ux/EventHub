@@ -11,7 +11,13 @@ const port = process.env.PORT || 5000;
 
 
 app.use(cors({
-  origin: 'https://event-hub-beta-one.vercel.app', 
+  origin: [
+    'https://event-hub-beta-one.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5000'
+  ],
   credentials: true
 }));
 app.use(express.json());
@@ -24,8 +30,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   if (req.url.startsWith('/events') || req.url.startsWith('/auth')) {
-    const newUrl = `/api${req.url}`;
-    return res.redirect(307, newUrl);
+    req.url = `/api${req.url}`;
   }
   next();
 });
