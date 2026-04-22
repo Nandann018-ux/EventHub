@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000;
 
 
 app.use(cors({
-  origin: true, // Reflects the request origin, allowing any origin while supporting credentials
+  origin: true, 
   credentials: true
 }));
 app.use(express.json());
@@ -25,7 +25,7 @@ app.get('/', (req: Request, res: Response) => {
 app.use((req, res, next) => {
   if (req.url.startsWith('/events') || req.url.startsWith('/auth')) {
     const newUrl = `/api${req.url}`;
-    return res.redirect(307, newUrl); // Use 307 to preserve method (POST/PUT/etc)
+    return res.redirect(307, newUrl);
   }
   next();
 });
