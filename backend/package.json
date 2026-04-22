@@ -1,6 +1,7 @@
 {
   "name": "eventhub-backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "Backend for EventHub application",
   "main": "dist/index.js",
   "scripts": {
